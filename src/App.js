@@ -4,6 +4,7 @@ import "./index.css";
 import * as parkData from "./data/data.json";
 
 const App = () => {
+  const [activePark, setActivePark] = React.useState(null);
   return (
     <Map center={[45.4, -75.7]} zoom={12}>
       <TileLayer
@@ -17,8 +18,25 @@ const App = () => {
             park.geometry.coordinates[1],
             park.geometry.coordinates[0]
           ]}
+          onClick={() => setActivePark(park)}
         />
       ))}
+      {activePark && (
+        <Popup
+          position={[
+            activePark.geometry.coordinates[1],
+            activePark.geometry.coordinates[0]
+          ]}
+          onClose={() => {
+            setActivePark(null);
+          }}
+        >
+          <div>
+            <h2>{activePark.properties.NAME}</h2>
+            <p>{activePark.properties.DESCRIPTIO}</p>
+          </div>
+        </Popup>
+      )}
     </Map>
   );
 };
